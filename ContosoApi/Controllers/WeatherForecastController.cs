@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Contoso.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/weather")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
