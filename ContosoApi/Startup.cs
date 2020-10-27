@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Contoso
+namespace ContosoApi
 {
     public class Startup
     {
@@ -26,6 +26,14 @@ namespace Contoso
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSingleton<MoviesService>();
+            services.AddCors(options =>
+                       {
+                           options.AddPolicy("CorsPolicy", policy =>
+                           {
+                               policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                           });
+                       });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,6 +47,8 @@ namespace Contoso
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

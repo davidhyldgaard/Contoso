@@ -1,6 +1,6 @@
 using System;
 
-namespace Contoso
+namespace ContosoApi
 {
     public class Movie
     {

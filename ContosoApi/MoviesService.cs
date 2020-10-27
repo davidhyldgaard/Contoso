@@ -1,49 +1,50 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
-namespace Contoso
+namespace ContosoApi
 {
 
-    public class MovieDbHandler
+    public class MoviesService
     {
-        private static List<Movie> _movies;
-        private MovieDbHandler()
-        {
-            _deleted_movies = new List<Movie>();
-            _movies = new List<Movie>();
-        }
+        private readonly ILogger _logger;
 
-        private static List<Movie> _deleted_movies;
+        public MoviesService(ILogger<MoviesService> logger)
+        => _logger = logger;
 
-        internal static IEnumerable<Movie> GetAllMovies()
+
+        private List<Movie> _movies;
+        private List<Movie> _deleted_movies;
+
+        public IEnumerable<Movie> GetAllMovies()
         {
             if (_movies == null) populate_mock_db();
 
             return _movies;
         }
 
-        internal static Movie GetMovieByName(string name)
+        internal Movie GetMovieByName(string name)
         {
             if (_movies == null) populate_mock_db();
 
             return _movies.Find(x => x.Name.ToUpper().Equals(name.ToUpper()));
         }
 
-        internal static IEnumerable<Movie> GetMoviesByReleaseDate(string value)
+        internal IEnumerable<Movie> GetMoviesByReleaseDate(string value)
         {
             if (_movies == null) populate_mock_db();
 
             return _movies.FindAll(m => m.ReleaseDate.CompareTo(Convert.ToDateTime(value)) == 0);
         }
 
-        internal static IEnumerable<Movie> GetMoviesByDirector(string value)
+        internal IEnumerable<Movie> GetMoviesByDirector(string value)
         {
             if (_movies == null) populate_mock_db();
 
             return _movies.FindAll(m => m.Director.ToLower().Equals(value.ToLower()));
         }
 
-        internal static Movie UpdateName(string name, string newName)
+        internal Movie UpdateName(string name, string newName)
         {
             if (_movies == null) populate_mock_db();
 
@@ -53,7 +54,7 @@ namespace Contoso
             return m;
         }
 
-        internal static bool DeleteMovie(string name)
+        internal bool DeleteMovie(string name)
         {
             Movie m = _movies.Find(m => m.Name.ToLower().Equals(name.ToLower()));
             if (m != null)
@@ -66,7 +67,7 @@ namespace Contoso
             return false;
         }
 
-        internal static Movie NewMovie(Movie movie)
+        internal Movie NewMovie(Movie movie)
         {
             if (_movies == null) populate_mock_db();
 
@@ -76,14 +77,14 @@ namespace Contoso
             return movie;
         }
 
-        private static bool canAddMovie(Movie movie)
+        private bool canAddMovie(Movie movie)
         {
             if (_deleted_movies.Exists(x => x.Name.ToLower().Equals(movie.Name.ToLower()))) return false;
             if (_movies.Exists(x => x.Name.ToLower().Equals(movie.Name.ToLower()))) return false;
             return true;
         }
 
-        private static void populate_mock_db()
+        private void populate_mock_db()
         {
             _deleted_movies = new List<Movie>();
             _movies = new List<Movie>{
