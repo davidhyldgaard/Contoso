@@ -10,21 +10,32 @@ import { MoviesService } from './movies.service';
 })
 export class AppComponent implements OnInit {
 
-  title = 'Movies Microservice Demo';
+  title = 'Movies App';
   movies: IMovie[];
-
 
   constructor(private moviesService: MoviesService) { }
 
   ngOnInit() {
-    this.getMovies();
   }
 
   getMovies() {
-    this.moviesService.getMovies().subscribe((movies: IMovie[])  => {
+    this.moviesService.getMovies().subscribe((movies: IMovie[]) => {
       this.movies = movies;
       console.log(this.movies);
-      console.table(this.movies);
+    }, error => console.log(error));
+  }
+
+  findMovie(att, val) {  
+    this.moviesService.getMovie(`${att}`, `${val}`).subscribe((movie: IMovie[]) => {
+      this.movies = movie;
+      console.log(this.movies);
+    }, error => console.log(error));
+  }
+
+  findMovie2() {  
+    this.moviesService.getMovie("name","the two towers").subscribe((movie: IMovie[]) => {
+      this.movies = movie;
+      console.log(this.movies);
     }, error => console.log(error));
   }
 }

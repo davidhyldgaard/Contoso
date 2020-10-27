@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["ContosoApi/ContosoApi.csproj", "ContosoApi/"]
-RUN dotnet restore "ContosoApi/ContosoApi.csproj"
+COPY ["contoso-api/contoso-api.csproj", "contoso-api/"]
+RUN dotnet restore "contoso-api/contoso-api.csproj"
 COPY . .
-WORKDIR "/src/ContosoApi"
-RUN dotnet build "ContosoApi.csproj" -c Release -o /app/build
+WORKDIR "/src/contoso-api"
+RUN dotnet build "contoso-api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ContosoApi.csproj" -c Release -o /app/publish
+RUN dotnet publish "contoso-api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ContosoApi.dll"]
+ENTRYPOINT ["dotnet", "contoso-api.dll"]

@@ -1,0 +1,22 @@
+version: "3.4"
+
+services: 
+    backendapi:
+        build:
+            context: .
+            dockerfile: contoso-api/Dockerfile
+        container_name: contoso-api-dev
+        ports: 
+            - "5000:80"
+        
+    frontend:
+        build:
+            context: ./contoso-app
+            dockerfile: Dockerfile-dev
+        container_name: contoso-app-dev
+        ports:
+            - "4201:4201"
+            - "49153:49153"
+        volumes: 
+            - ./contoso-app:/app
+            - /app/node_modules

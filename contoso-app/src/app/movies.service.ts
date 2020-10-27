@@ -10,7 +10,6 @@ export class MoviesService {
 
   constructor(private http: HttpClient) { }
 
-  getMovies() {
-    return this.http.get(this.baseUrl + 'movies'); 
-  }
+  getMovies = () => this.http.get(this.baseUrl + 'movies'); 
+  getMovie = (att: string, value: string) => this.http.get(this.baseUrl + `movies/${att}/${value}`);
 }

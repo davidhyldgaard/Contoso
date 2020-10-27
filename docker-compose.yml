@@ -4,14 +4,14 @@ services:
     backendapi:
         build:
             context: .
-            dockerfile: ContosoApi/Dockerfile
+            dockerfile: contoso-api/Dockerfile
         container_name: contoso-api
         ports: 
             - 5000:80
         
     frontend:
         build:
-            context: ./ContosoApp
+            context: ./contoso-app
             dockerfile: Dockerfile
         container_name: contoso-app
         ports:

@@ -3,6 +3,6 @@ export interface IMovie {
     director: string;
     cast: string;
     description: string;
-    releaseDate: string;
+    releaseDate: Date;
     genre: string;
 }
