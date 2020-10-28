@@ -8,73 +8,57 @@ namespace ContosoApi
     public class MoviesService
     {
         private readonly ILogger _logger;
-
         public MoviesService(ILogger<MoviesService> logger)
         => _logger = logger;
-
-
         private List<Movie> _movies;
         private List<Movie> _deleted_movies;
 
         public IEnumerable<Movie> GetAllMovies()
         {
             if (_movies == null) populate_mock_db();
-
             return _movies;
         }
 
         public Movie GetMovieByName(string name)
         {
             if (_movies == null) populate_mock_db();
-
             return _movies.Find(x => x.Name.ToUpper().Equals(name.ToUpper()));
         }
 
         public IEnumerable<Movie> GetMoviesByReleaseDate(string value)
         {
             if (_movies == null) populate_mock_db();
-
             return _movies.FindAll(m => m.ReleaseDate.CompareTo(Convert.ToDateTime(value)) == 0);
         }
 
         public IEnumerable<Movie> GetMoviesByDirector(string value)
         {
             if (_movies == null) populate_mock_db();
-
             return _movies.FindAll(m => m.Director.ToLower().Equals(value.ToLower()));
         }
 
-        public Movie UpdateName(string name, string newName)
+        public Movie UpdateMovie(Movie movie)
         {
             if (_movies == null) populate_mock_db();
 
-            Movie m = _movies.Find(x => x.Name.ToUpper().Equals(name.ToUpper()));
-            if (m != null)
-                m.Name = newName;
-            return m;
+            int mi = _movies.FindIndex(x => x.Name.ToUpper().Equals(movie.Name.ToUpper()));
+            if (mi != -1)
+                _movies[mi] = movie;
+            return _movies[mi];
         }
 
-        public bool DeleteMovie(string name)
+        public bool DeleteMovie(String name)
         {
-            Movie m = _movies.Find(m => m.Name.ToLower().Equals(name.ToLower()));
-            if (m != null)
-            {
-                _movies.Remove(m);
-                _deleted_movies.Add(m);
-                return true;
-            }
-
-            return false;
+            return _movies.RemoveAll(x => x.Name.ToLower().Equals(name.ToLower())) > 0;
         }
 
         public Movie NewMovie(Movie movie)
         {
             if (_movies == null) populate_mock_db();
-
             if (!canAddMovie(movie)) return null;
 
             _movies.Add(movie);
-            return movie;
+            return _movies.Find(x => x == movie);
         }
 
         private bool canAddMovie(Movie movie)
@@ -122,7 +106,5 @@ namespace ContosoApi
                 }
             };
         }
-
-
     }
 }

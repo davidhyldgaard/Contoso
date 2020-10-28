@@ -1,20 +1,71 @@
 <div class="container" style="margin-top: 10px;">
   <h1>{{title}}</h1>
+  <h3>Search in movies</h3>
   <div>
-    
-      <select #box1 placeholder="attribute">
-        <option value="name" selected>Name</option>
-        <option value="director">Director</option>
-        <option value="release date">Release Date</option>
-      </select>
-      <input type="text" #box2 placeholder="value">
-    
-    <button (click)="findMovie(box1.value,box2.value)" >Find Movie</button>
+    <select #box1>
+      <option value="name" selected>Name</option>
+      <option value="director">Director</option>
+      <option value="release date">Release Date</option>
+    </select>
+    <input type="text" #box2 placeholder="value">
+    <button (click)="findMovie(box1.value,box2.value)">Find Movie</button>
   </div>
-  <button (click)="getMovies()" >Get All Movies</button>
-  <ul>
-    <li class="list-unstyled" *ngFor="let movie of movies">
-      {{movie.name}} - {{movie.director}} - {{movie.releaseDate}}
-    </li>
-  </ul>
+  <div style="margin-top: 10px;">
+    <button (click)="getMovies()">Get All Movies</button>
+  </div>
+  <h3>Search in Genres</h3>
+  <div>
+    <select #genreInput placeholder="genre">
+      <option *ngFor="let genre of genres">{{genre}}</option>
+    </select>
+    <button (click)="findMoviesByGenre(genreInput.value)">Search</button>
+  </div>
+  <form (submit)="newMovie(newName.value,newDesc.value,newDir.value,newCast.value,newDate.value,newGenre.value)">
+    <h3>Add new movie</h3>
+    <div>
+      <label>Movie Name: </label><input required type="text" #newName>
+    </div>
+    <div>
+      <label>Description: </label><input required type="text" #newDesc>
+    </div>
+    <div>
+      <label>Director: </label><input required type="text" #newDir>
+    </div>
+    <div>
+      <label>Cast: </label><input required type="text" #newCast>
+    </div>
+    <div>
+      <label>Release Date: </label><input required type="date" #newDate>
+    </div>
+    <div>
+      <label>Genre: </label><input type="text" required #newGenre>
+    </div>
+    <input type="submit" value="Add Movie">
+  </form>
+
+  <div style="background: rgb(180, 205, 206);padding: 10px;margin-top: 10px;">
+    <ul>
+      <li class="list-unstyled" *ngFor="let movie of movies">
+        <b>{{movie.name}}, Director: {{movie.director}}, Genre: {{movie.genre}}</b>
+        <div>
+          <select #updateArea>
+            <option value="" selected disabled hidden>Update...</option>
+            <option value="director">Director</option>
+            <option value="releasedate">Release Date</option>
+            <option value="description">Description</option>
+            <option value="genre">Genre</option>
+            <option value="cast">Cast</option>
+          </select>
+          <input type="text" #newValue placeholder="New Value">
+          <button (click)="updateMovie(movie, updateArea.value, newValue.value)">Update</button>
+        </div>
+        <ul>
+          <li>Description: {{movie.description}}</li>
+          <li>Cast: {{movie.cast}}</li>
+          <li>Release Date: {{movie.releaseDate | date}}</li>
+          <li><button (click)="deleteMovie(movie.name)">Delete movie</button></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 </div>

@@ -46,9 +46,10 @@ namespace ContosoApi.Controllers
             }
         }
 
-        [HttpPut("name/{oldval}/{newval}")]
-        public IActionResult UpdateName(string oldval, string newval)
-            => Ok(_moviesService.UpdateName(oldval, newval));
+        [HttpPut]
+        [Consumes(MediaTypeNames.Application.Json)]
+        public IActionResult UpdateMovie(Movie movie)
+            => Ok(_moviesService.UpdateMovie(movie));
 
 
         [HttpPost]
@@ -57,9 +58,8 @@ namespace ContosoApi.Controllers
             => Ok(_moviesService.NewMovie(movie));
 
 
-
         [HttpDelete("{name}")]
-        public IActionResult DeleteMovie(string name)
+        public IActionResult DeleteMovie(String name)
             => Ok(_moviesService.DeleteMovie(name));
 
     }
